@@ -21,6 +21,7 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
     var inputLines: List<String> = emptyList()
 
     var isTestRun = false
+    var currentPart = 1
 
     private var part1Block: (() -> Any?)? = null
     private var part2Block: (() -> Any?)? = null
@@ -38,8 +39,14 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
         part2Block = block
     }
 
-    private fun testPart(partName: String, part: (() -> Any?)?, expected: Any?) {
+    fun bothParts(block: () -> Any?) {
+        part1Block = block
+        part2Block = block
+    }
+
+    private fun testPart(part: (() -> Any?)?, expected: Any?) {
         if (part != null && expected != null) {
+            val partName = "testPart${currentPart}"
             val actual = part.invoke()
             if (actual != expected) {
                 terminal.println("${TextColors.red("Failed")} test for $partName! Expected '$expected' but got '$actual' instead")
@@ -49,14 +56,14 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
         }
     }
 
-    private fun runPart(partName: String, part: (() -> Any?)?) {
+    private fun runPart(part: (() -> Any?)?) {
         if (part != null) {
             val result: Any?
             val time = measureNanoTime {
                 result = part.invoke()
             }
             val msTime = TextColors.brightMagenta("(${time.nanoseconds})")
-            terminal.println("The result of $partName is ${TextStyles.bold(TextColors.brightCyan(result.toString()))} $msTime")
+            terminal.println("The result of part${currentPart} is ${TextStyles.bold(TextColors.brightCyan(result.toString()))} $msTime")
         }
     }
 
@@ -69,12 +76,14 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
 
         isTestRun = true
         inputString = this::class.java.getResourceAsStream(inputFileName("_test"))!!.bufferedReader().readText()
+        currentPart = 1
         this.scope()
-        testPart("part1", part1Block, expectPart1)
+        testPart(part1Block, expectPart1)
         this::class.java.getResourceAsStream(inputFileName("_test_02"))
             ?.let { inputString = it.bufferedReader().readText() }
+        currentPart = 2
         this.scope()
-        testPart("part2", part2Block, expectPart2)
+        testPart(part2Block, expectPart2)
         isTestRun = false
 
         println()
@@ -82,9 +91,11 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
         println()
 
         inputString = this::class.java.getResourceAsStream(inputFileName())!!.bufferedReader().readText()
+        currentPart = 1
         this.scope()
-        runPart("part1", part1Block)
+        runPart(part1Block)
+        currentPart = 2
         this.scope()
-        runPart("part2", part2Block)
+        runPart(part2Block)
     }
 }
