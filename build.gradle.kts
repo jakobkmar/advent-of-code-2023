@@ -20,5 +20,6 @@ kotlin {
 sourceSets {
     main {
         resources.srcDirs("input")
+        kotlin.srcDirs("src/kotlin")
     }
 }
