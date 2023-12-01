@@ -1,13 +1,28 @@
 fun main() = day(1) {
 
-    part1 {
+    val numberNames =
+        listOf("one", "two",  "three",  "four",  "five",  "six",  "seven",  "eight",  "nine")
 
+    val solve = {
+        inputLines.sumOf { line ->
+            val nums = mutableListOf<Int>()
+
+            line.forEachIndexed { cIndex, c ->
+                if (c.isDigit())
+                    nums.add(c.digitToInt())
+                numberNames.forEachIndexed { index, digit ->
+                    if (line.drop(cIndex).startsWith(digit))
+                        nums.add(index + 1)
+                }
+            }
+
+            "${nums.first()}${nums.last()}".toInt()
+        }
     }
 
-    part2 {
+    part1(solve)
+    part2(solve)
 
-    }
-
-    expectPart1 = Unit
-    expectPart2 = Unit
+    expectPart1 = 142
+    expectPart2 = 281
 }
