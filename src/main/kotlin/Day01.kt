@@ -5,7 +5,7 @@ fun main() = day(1) {
 
     val solve = {
         inputLines.sumOf { line ->
-            val nums = mutableListOf<Int>()
+            val nums = ArrayDeque<Int>()
 
             line.forEachIndexed { cIndex, c ->
                 if (c.isDigit())
