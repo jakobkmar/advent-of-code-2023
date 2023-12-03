@@ -98,4 +98,12 @@ class Day(private val number: Int, val scope: Day.() -> Unit) {
         this.scope()
         runPart(part2Block)
     }
+
+    fun List<String>.readGrid() = buildMap {
+        this@readGrid.forEachIndexed { lineIndex, line ->
+            line.forEachIndexed { charIndex, char ->
+                put(Pos(charIndex, lineIndex), char)
+            }
+        }
+    }
 }
