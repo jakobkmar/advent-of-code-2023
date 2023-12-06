@@ -12,7 +12,7 @@ fun main() = day(4) {
         .map { pair -> pair.second.count { it in pair.first } }
 
     part1 {
-        matches.sumOf { 2.0.pow(it - 1).toLong() }
+        matches.sumOf { 1L shl (it - 1) }
     }
 
     part2 {
